@@ -1,0 +1,31 @@
+kind = "web"
+previewPath = "/"
+title = "Sparkle Note Hub"
+version = "1.0.0"
+id = "artifacts/sparkle-note-hub"
+router = "path"
+
+[[integratedSkills]]
+name = "react-vite"
+version = "1.0.0"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 25826
+
+[services.development]
+run = "pnpm --filter @workspace/sparkle-note-hub run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/sparkle-note-hub", "run", "build" ]
+publicDir = "artifacts/sparkle-note-hub/dist/public"
+serve = "static"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "25826"
+BASE_PATH = "/"

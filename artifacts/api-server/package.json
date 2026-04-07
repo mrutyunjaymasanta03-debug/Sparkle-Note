@@ -12,6 +12,8 @@
   "dependencies": {
     "@workspace/api-zod": "workspace:*",
     "@workspace/db": "workspace:*",
+    "@workspace/mongodb": "workspace:*",
+    "mongodb": "^6.13.1",
     "cookie-parser": "^1.4.7",
     "cors": "^2",
     "drizzle-orm": "catalog:",

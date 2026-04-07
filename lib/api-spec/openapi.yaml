@@ -3,13 +3,15 @@ info:
   # Do not change the title, if the title changes, the import paths will be broken
   title: Api
   version: 0.1.0
-  description: API specification
+  description: Sparkle Note Hub API specification
 servers:
   - url: /api
     description: Base API path
 tags:
   - name: health
     description: Health operations
+  - name: notes
+    description: Note operations
 paths:
   /healthz:
     get:
@@ -24,6 +26,197 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/HealthStatus"
+
+  /notes:
+    get:
+      operationId: listNotes
+      tags: [notes]
+      summary: List all notes
+      description: Returns all notes, optionally filtered by search or tag
+      parameters:
+        - name: search
+          in: query
+          required: false
+          schema:
+            type: string
+          description: Full-text search across title and content
+        - name: tag
+          in: query
+          required: false
+          schema:
+            type: string
+          description: Filter notes by tag
+        - name: pinned
+          in: query
+          required: false
+          schema:
+            type: boolean
+          description: Filter only pinned notes
+      responses:
+        "200":
+          description: List of notes
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Note"
+    post:
+      operationId: createNote
+      tags: [notes]
+      summary: Create a note
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateNoteBody"
+      responses:
+        "201":
+          description: Created note
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Note"
+
+  /notes/stats:
+    get:
+      operationId: getNoteStats
+      tags: [notes]
+      summary: Get note statistics
+      description: Returns counts and aggregations for dashboard
+      responses:
+        "200":
+          description: Note statistics
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NoteStats"
+
+  /notes/tags:
+    get:
+      operationId: getAllTags
+      tags: [notes]
+      summary: Get all unique tags
+      description: Returns all distinct tags used across notes
+      responses:
+        "200":
+          description: List of tags with counts
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/TagCount"
+
+  /notes/recent:
+    get:
+      operationId: getRecentNotes
+      tags: [notes]
+      summary: Get recently modified notes
+      description: Returns the 5 most recently updated notes
+      responses:
+        "200":
+          description: Recent notes
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Note"
+
+  /notes/{id}:
+    get:
+      operationId: getNote
+      tags: [notes]
+      summary: Get a single note
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Note
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Note"
+        "404":
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+    put:
+      operationId: updateNote
+      tags: [notes]
+      summary: Update a note
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateNoteBody"
+      responses:
+        "200":
+          description: Updated note
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Note"
+        "404":
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+    delete:
+      operationId: deleteNote
+      tags: [notes]
+      summary: Delete a note
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "204":
+          description: Deleted
+
+  /notes/{id}/pin:
+    patch:
+      operationId: toggleNotePin
+      tags: [notes]
+      summary: Toggle note pin status
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Updated note
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Note"
+        "404":
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
 components:
   schemas:
     HealthStatus:
@@ -34,3 +227,108 @@ components:
       required:
         - status
 
+    Note:
+      type: object
+      properties:
+        id:
+          type: string
+        title:
+          type: string
+        content:
+          type: string
+        color:
+          type: string
+          description: Hex color or named color for the note card
+        tags:
+          type: array
+          items:
+            type: string
+        pinned:
+          type: boolean
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+      required:
+        - id
+        - title
+        - content
+        - color
+        - tags
+        - pinned
+        - createdAt
+        - updatedAt
+
+    CreateNoteBody:
+      type: object
+      properties:
+        title:
+          type: string
+        content:
+          type: string
+        color:
+          type: string
+        tags:
+          type: array
+          items:
+            type: string
+        pinned:
+          type: boolean
+      required:
+        - title
+        - content
+
+    UpdateNoteBody:
+      type: object
+      properties:
+        title:
+          type: string
+        content:
+          type: string
+        color:
+          type: string
+        tags:
+          type: array
+          items:
+            type: string
+        pinned:
+          type: boolean
+
+    NoteStats:
+      type: object
+      properties:
+        total:
+          type: integer
+        pinned:
+          type: integer
+        withTags:
+          type: integer
+        recentCount:
+          type: integer
+          description: Notes modified in last 7 days
+      required:
+        - total
+        - pinned
+        - withTags
+        - recentCount
+
+    TagCount:
+      type: object
+      properties:
+        tag:
+          type: string
+        count:
+          type: integer
+      required:
+        - tag
+        - count
+
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
+      required:
+        - error
