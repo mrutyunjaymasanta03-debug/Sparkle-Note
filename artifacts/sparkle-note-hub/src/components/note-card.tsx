@@ -1,8 +1,6 @@
-import { useState } from "react";
 import { format } from "date-fns";
 import { Pin, Trash2, Edit3, MoreVertical } from "lucide-react";
-import { Note } from "@workspace/api-client-react/src/generated/api.schemas";
-import { useDeleteNote, useToggleNotePin, getListNotesQueryKey, getGetNoteStatsQueryKey, getGetAllTagsQueryKey, getGetRecentNotesQueryKey } from "@workspace/api-client-react";
+import { type Note, useDeleteNote, useToggleNotePin, getListNotesQueryKey, getGetNoteStatsQueryKey, getGetAllTagsQueryKey, getGetRecentNotesQueryKey } from "@workspace/api-client-react";
 import { useQueryClient } from "@tanstack/react-query";
 import { Card, CardHeader, CardTitle, CardContent, CardFooter } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";

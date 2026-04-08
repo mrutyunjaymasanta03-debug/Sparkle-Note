@@ -26,7 +26,7 @@ export function RecentNotes({ onNoteClick }: RecentNotesProps) {
     );
   }
 
-  if (!recentNotes || recentNotes.length === 0) {
+  if (!recentNotes || !Array.isArray(recentNotes) || recentNotes.length === 0) {
     return null;
   }
 
