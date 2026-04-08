@@ -8,9 +8,13 @@ interface RecentNotesProps {
 }
 
 export function RecentNotes({ onNoteClick }: RecentNotesProps) {
-  const { data: recentNotes, isLoading } = useGetRecentNotes({
+  const { data, isLoading } = useGetRecentNotes({
     query: { queryKey: getGetRecentNotesQueryKey() }
   });
+
+  const recentNotes = Array.isArray(data)
+    ? data
+    : (data as any)?.data || (data as any)?.notes || [];
 
   if (isLoading) {
     return (
@@ -26,7 +30,7 @@ export function RecentNotes({ onNoteClick }: RecentNotesProps) {
     );
   }
 
-  if (!recentNotes || !Array.isArray(recentNotes) || recentNotes.length === 0) {
+  if (!recentNotes || recentNotes.length === 0) {
     return null;
   }
 
