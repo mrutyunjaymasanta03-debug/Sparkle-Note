@@ -24,14 +24,22 @@ export default function Dashboard() {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [editingNoteId, setEditingNoteId] = useState<string | null>(null);
 
-  const { data: notes, isLoading } = useListNotes(
+  const { data: notesData, isLoading } = useListNotes(
     { search: debouncedSearch, tag: selectedTag, pinned: showPinnedOnly || undefined },
     { query: { queryKey: getListNotesQueryKey({ search: debouncedSearch, tag: selectedTag, pinned: showPinnedOnly || undefined }) } }
   );
 
-  const { data: allTags, isLoading: isLoadingTags } = useGetAllTags({
+  const notes = Array.isArray(notesData)
+    ? notesData
+    : (notesData as any)?.data || (notesData as any)?.notes || [];
+
+  const { data: allTagsData, isLoading: isLoadingTags } = useGetAllTags({
     query: { queryKey: getGetAllTagsQueryKey() },
   });
+
+  const allTags = Array.isArray(allTagsData)
+    ? allTagsData
+    : (allTagsData as any)?.data || (allTagsData as any)?.tags || [];
 
   const handleCreateNote = () => {
     setEditingNoteId(null);

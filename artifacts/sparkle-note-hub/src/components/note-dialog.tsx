@@ -64,11 +64,15 @@ export function NoteDialog({ open, onOpenChange, noteId }: NoteDialogProps) {
     },
   });
 
-  const { data: allTagsData } = useGetAllTags({
+  const { data: allTagsRaw } = useGetAllTags({
     query: { queryKey: getGetAllTagsQueryKey() },
   });
 
-  const existingTags = allTagsData?.map((t) => t.tag) ?? [];
+  const allTagsData = Array.isArray(allTagsRaw)
+    ? allTagsRaw
+    : (allTagsRaw as any)?.data || (allTagsRaw as any)?.tags || [];
+
+  const existingTags = allTagsData.map((t: { tag: string }) => t.tag);
 
   const createNote = useCreateNote();
   const updateNote = useUpdateNote();
