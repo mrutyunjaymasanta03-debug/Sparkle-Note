@@ -1,9 +1,8 @@
-FROM node:22-alpine AS base
+FROM node:22-slim AS build
 ENV PNPM_HOME="/pnpm"
 ENV PATH="$PNPM_HOME:$PATH"
 RUN corepack enable
 
-FROM base AS build
 WORKDIR /app
 COPY pnpm-workspace.yaml pnpm-lock.yaml package.json ./
 COPY lib/ ./lib/
@@ -11,7 +10,11 @@ COPY artifacts/api-server/ ./artifacts/api-server/
 RUN pnpm install --frozen-lockfile
 RUN pnpm --filter @workspace/api-server run build
 
-FROM base AS runtime
+FROM node:22-slim AS runtime
+ENV PNPM_HOME="/pnpm"
+ENV PATH="$PNPM_HOME:$PATH"
+RUN corepack enable
+
 WORKDIR /app
 ENV NODE_ENV=production
 ENV PORT=8080
