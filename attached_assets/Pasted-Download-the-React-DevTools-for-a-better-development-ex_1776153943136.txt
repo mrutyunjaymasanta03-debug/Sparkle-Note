@@ -1,0 +1,19 @@
+Download the React DevTools for a better development experience: https://react.dev/link/react-devtools
+:5173/api/notes/stats:1  Failed to load resource: the server responded with a status of 500 (Internal Server Error)
+:5173/api/notes/recent:1  Failed to load resource: the server responded with a status of 500 (Internal Server Error)
+:5173/api/notes/tags:1  Failed to load resource: the server responded with a status of 500 (Internal Server Error)
+:5173/api/notes?search=:1  Failed to load resource: the server responded with a status of 500 (Internal Server Error)
+:5173/api/notes/stats:1  Failed to load resource: the server responded with a status of 500 (Internal Server Error)
+:5173/api/notes/recent:1  Failed to load resource: the server responded with a status of 500 (Internal Server Error)
+:5173/api/notes/tags:1  Failed to load resource: the server responded with a status of 500 (Internal Server Error)
+:5173/api/notes?search=:1  Failed to load resource: the server responded with a status of 500 (Internal Server Error)
+:5173/api/notes/stats:1  Failed to load resource: the server responded with a status of 500 (Internal Server Error)
+:5173/api/notes/recent:1  Failed to load resource: the server responded with a status of 500 (Internal Server Error)
+:5173/api/notes/tags:1  Failed to load resource: the server responded with a status of 500 (Internal Server Error)
+:5173/api/notes?search=:1  Failed to load resource: the server responded with a status of 500 (Internal Server Error)
+:5173/api/notes/stats:1  Failed to load resource: the server responded with a status of 500 (Internal Server Error)
+:5173/api/notes/recent:1  Failed to load resource: the server responded with a status of 500 (Internal Server Error)
+:5173/api/notes/tags:1  Failed to load resource: the server responded with a status of 500 (Internal Server Error)
+:5173/api/notes?search=:1  Failed to load resource: the server responded with a status of 500 (Internal Server Error)
+chunk-FOGTOUTO.js?v=21a81eec:328 Warning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+(anonymous) @ chunk-FOGTOUTO.js?v=21a81eec:328

@@ -1,6 +1,7 @@
 import { Router, type IRouter } from "express";
 import { ObjectId } from "mongodb";
 import { getDb } from "@workspace/mongodb";
+import { logger } from "../lib/logger";
 import {
   CreateNoteBody,
   UpdateNoteBody,
@@ -50,7 +51,8 @@ router.get("/notes/stats", async (req, res) => {
 
     res.json({ total, pinned, withTags, recentCount });
   } catch (err) {
-    req.log.error({ err }, "Failed to get note stats");
+    console.error("Failed to get note stats:", err);
+    logger.error({ err }, "Failed to get note stats");
     res.status(500).json({ error: "Internal server error" });
   }
 });
@@ -70,7 +72,8 @@ router.get("/notes/tags", async (req, res) => {
     const result = await col.aggregate(pipeline).toArray();
     res.json(result);
   } catch (err) {
-    req.log.error({ err }, "Failed to get tags");
+    console.error("Failed to get tags:", err);
+    logger.error({ err }, "Failed to get tags");
     res.status(500).json({ error: "Internal server error" });
   }
 });
@@ -88,7 +91,8 @@ router.get("/notes/recent", async (req, res) => {
 
     res.json(docs.map((d) => toNote(d as NoteDoc & { _id: ObjectId })));
   } catch (err) {
-    req.log.error({ err }, "Failed to get recent notes");
+    console.error("Failed to get recent notes:", err);
+    logger.error({ err }, "Failed to get recent notes");
     res.status(500).json({ error: "Internal server error" });
   }
 });
@@ -121,7 +125,8 @@ router.get("/notes", async (req, res) => {
     const docs = await col.find(filter).sort({ updatedAt: -1 }).toArray();
     res.json(docs.map((d) => toNote(d as NoteDoc & { _id: ObjectId })));
   } catch (err) {
-    req.log.error({ err }, "Failed to list notes");
+    console.error("Failed to list notes:", err);
+    logger.error({ err }, "Failed to list notes");
     res.status(500).json({ error: "Internal server error" });
   }
 });
@@ -151,7 +156,8 @@ router.post("/notes", async (req, res) => {
     const result = await col.insertOne(doc);
     res.status(201).json(toNote({ ...doc, _id: result.insertedId }));
   } catch (err) {
-    req.log.error({ err }, "Failed to create note");
+    console.error("Failed to create note:", err);
+    logger.error({ err }, "Failed to create note");
     res.status(500).json({ error: "Internal server error" });
   }
 });
@@ -176,7 +182,8 @@ router.get("/notes/:id", async (req, res) => {
 
     res.json(toNote(doc as NoteDoc & { _id: ObjectId }));
   } catch (err) {
-    req.log.error({ err }, "Failed to get note");
+    console.error("Failed to get note:", err);
+    logger.error({ err }, "Failed to get note");
     res.status(500).json({ error: "Internal server error" });
   }
 });
@@ -219,7 +226,8 @@ router.put("/notes/:id", async (req, res) => {
 
     res.json(toNote(result as NoteDoc & { _id: ObjectId }));
   } catch (err) {
-    req.log.error({ err }, "Failed to update note");
+    console.error("Failed to update note:", err);
+    logger.error({ err }, "Failed to update note");
     res.status(500).json({ error: "Internal server error" });
   }
 });
@@ -238,7 +246,8 @@ router.delete("/notes/:id", async (req, res) => {
     await col.deleteOne({ _id: new ObjectId(id) });
     res.status(204).send();
   } catch (err) {
-    req.log.error({ err }, "Failed to delete note");
+    console.error("Failed to delete note:", err);
+    logger.error({ err }, "Failed to delete note");
     res.status(500).json({ error: "Internal server error" });
   }
 });
@@ -274,7 +283,8 @@ router.patch("/notes/:id/pin", async (req, res) => {
 
     res.json(toNote(result as NoteDoc & { _id: ObjectId }));
   } catch (err) {
-    req.log.error({ err }, "Failed to toggle pin");
+    console.error("Failed to toggle pin:", err);
+    logger.error({ err }, "Failed to toggle pin");
     res.status(500).json({ error: "Internal server error" });
   }
 });
