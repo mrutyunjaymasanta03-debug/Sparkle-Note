@@ -1,4 +1,4 @@
-FROM node:22-slim AS build
+FROM node:20-slim AS build
 ENV PNPM_HOME="/pnpm"
 ENV PATH="$PNPM_HOME:$PATH"
 RUN corepack enable
@@ -10,7 +10,7 @@ COPY artifacts/api-server/ ./artifacts/api-server/
 RUN pnpm install --frozen-lockfile
 RUN pnpm --filter @workspace/api-server run build
 
-FROM node:22-slim AS runtime
+FROM node:20-slim AS runtime
 ENV PNPM_HOME="/pnpm"
 ENV PATH="$PNPM_HOME:$PATH"
 RUN corepack enable
